@@ -245,10 +245,12 @@ function shuffleArray(arr) {
 
 //求数组最大最小值
 function maxArray(arr) {
-	return Math.max.apply(null,arr);
+	// return Math.max.apply(null,arr);
+	return Math.max(...arr);
 }
 function minArray(arr) {
-	return Math.min.apply(null,arr);
+	// return Math.min.apply(null,arr);
+	return Math.min(...arr);
 }
 
 //数组求和
