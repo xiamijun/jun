@@ -260,6 +260,14 @@ function sumArr(arr) {
 	);
 }
 
+//数组元素乘积
+//等同php中的array_product
+function array_product(arr) {
+	return arr.reduce(
+		(pre,cur)=>{return pre*cur;}
+	);
+}
+
 //从数组中随机取元素
 function randomOneOfArray(arr) {
 	return arr[Math.floor(Math.random()*arr.length)];
@@ -274,6 +282,45 @@ function getEleCount(obj,ele) {
 		}
 	}
 	return num;
+}
+
+//统计数组（字符串）所有元素出现的次数
+//等同于php中的array_count_values，但返回的是对象
+function array_count_values(arr) {
+	let map={};
+	for (let i=0;i<arr.length;i++){
+		if (!map[arr[i]]){
+			map[arr[i]]=1;
+		}else {
+			map[arr[i]]++;
+		}
+	}
+	return map;
+}
+
+//返回数组(对象)中部分的或所有的键名
+//等同于php中的array_keys
+function array_keys(obj,search_value) {
+	if (!search_value){
+		return Object.keys(obj);
+	}else {
+		indices=[];
+		let idx=obj.indexOf(search_value);
+		while (idx!=-1){
+			indices.push(idx);
+			idx=obj.indexOf(search_value,idx+1);
+		}
+		return indices;
+	}
+}
+
+//对象的值转为数组
+function objToArray(obj) {
+    let arr=[];
+    for(let i in obj){
+        arr.push(obj[i]);
+    }
+    return arr;
 }
 
 //筛选数组
