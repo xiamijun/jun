@@ -693,3 +693,38 @@ function longestWord(str,splitType=' ') {
 	});
 	return max;
 }
+
+//rate是1到5的值
+//取星级
+function star(rate) {
+    return '★★★★★☆☆☆☆☆'.slice(5-rate,10-rate);
+}
+
+//金钱格式化：1234567890 --> 1,234,567,890
+function formatCash(str) {
+	return str.split('').reverse().reduce((prev,next,index)=>{
+		return ((index%3)?next:(next+','))+prev;
+	})
+}
+
+//获取连续子串的最大和
+function getMaxSumOfSubstring(str) {
+    let arr=str.split(' ');
+    let len=arr.length;
+    let newArr=[];
+    for(let i=0;i<len;i++){
+        arr[i]=parseInt(arr[i]);
+        newArr.push(arr[i]);
+    }
+    for(let i=0;i<len-1;i++){
+        newArr.push(arr[i]);
+        for(let j=i+1;j<len;j++){
+            let item=0;
+            for(let t=i;t<=j;t++){
+                item+=arr[t];
+            }
+            newArr.push(item);
+        }
+    }
+    return Math.max(...newArr);
+}
