@@ -268,6 +268,32 @@ function array_product(arr) {
 	);
 }
 
+//range(1,10)等同于php中的range方法
+//[1,2,3,4,5,6,7,8,9,10]
+function range(low,high){
+	let arr=[];
+	while(low<=high){
+		arr.push(low++);
+	}
+	return arr;
+}
+
+//阶乘
+function factorial(n){
+	return array_product(range(1,n));
+}
+
+// 排列数
+function A(n,m){
+	return factorial(n)/factorial(n-m);
+}
+
+// 组合数
+function C(n,m){
+	return A(n,m)/factorial(m);
+}
+
+
 //从数组中随机取元素
 function randomOneOfArray(arr) {
 	return arr[Math.floor(Math.random()*arr.length)];
@@ -444,19 +470,20 @@ function randomColor() {
 }
 
 //到某一个时间的倒计时
-//getEndTime('2017/7/22 16:0:0')
+//countTime('2017/7/22 16:0:0')
 //"剩余时间6天 2小时 28 分钟20 秒"
-function getEndTime(endTime) {
+function countTime(endTime) {
 	let startDate=new Date();
 	let endDate=new Date(endTime);
-	let t=endDate.getTime()-startDate.getTime();
-	let d=0,h=0,m=0,s=0;
-	if (t>=0){
-		d=Math.floor(t/1000/60/60/24);
-		h=Math.floor(t/1000/60/60%24);
-		m=Math.floor(t/1000/60%60);
-		s=Math.floor(t/1000%60);
-        return '剩余时间：'+d+'天'+d+'小时'+m+'分'+s+'秒';
+	let totalSecs=(endDate.getTime()-startDate.getTime())/1000;
+	if (totalSecs>=0){
+		let d=Math.floor(totalSecs/(24*60*60)),
+        	lefTime=Math.floor(totalSecs%(24*60*60));
+    	let h=Math.floor(lefTime/(60*60)),
+        	leftTime2=Math.floor(lefTime%(60*60));
+    	let m=Math.floor(leftTime2/60),
+        	s=Math.floor(leftTime2%60);
+        return '剩余时间：'+d+'天'+h+'小时'+m+'分'+s+'秒';
 	}else {
 		return '时间已过期'
 	}
@@ -727,4 +754,9 @@ function getMaxSumOfSubstring(str) {
         }
     }
     return Math.max(...newArr);
+}
+
+//用newStr替换fullStr中的oldStr
+function replaceString(oldStr,newStr,fullStr){
+	return fullStr.split(oldStr).join(newStr);
 }
