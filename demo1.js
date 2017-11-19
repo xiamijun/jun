@@ -3,41 +3,38 @@
  */
 //手机类型判断
 const BrowserInfo={
-	userAgent:navigator.userAgent.toLowerCase(),
-	isAndroid:Boolean(navigator.userAgent.match(/android/ig)),
-	isIphone:Boolean(navigator.userAgent.match(/iphone|ipod/ig)),
-	isIpad:Boolean(navigator.userAgent.match(/ipad/ig)),
-	isWeixin:Boolean(navigator.userAgent.match(/MicroMessenger/ig))
+    userAgent:navigator.userAgent.toLowerCase(),
+    isAndroid:Boolean(navigator.userAgent.match(/android/ig)),
+    isIphone:Boolean(navigator.userAgent.match(/iphone|ipod/ig)),
+    isIpad:Boolean(navigator.userAgent.match(/ipad/ig)),
+    isWeixin:Boolean(navigator.userAgent.match(/MicroMessenger/ig))
 };
 
 //返回字符串长度，汉字计数为2
 function strLength(str) {
-	let a=0;
-	for (let i=0;i<str.length;i++){
-		if (str.charCodeAt(i)>255){
-			a+=2;
-		}else {}
-		a++;
-	}
-	return a;
+    let a=0;
+    for (let i=0;i<str.length;i++){
+	if (str.charCodeAt(i)>255){
+		a+=2;
+	}else {}
+	a++;
+}
+return a;
 }
 
 //获取url参数
 //getUrlPrmt('segmentfault.com/write?draftId=122000011938')
 //Object{draftId: "122000011938"}
-function getUrlPrmt(url) {
-	url=url?url:window.location.href;
-	let pa=url.substring(url.indexOf('?')+1),
-		arrs=pa.split('&'),
-		result={};
-	for (let i=0;i<arrs.length;i++){
-		let pos=arrs[i].indexOf('=');
-		if (pos==-1){
-			continue;
-		}
-		let name=arrs[i].substring(0,pos),
-			value=decodeURIComponent(arrs[i].substring(pos+1));
-		result[name]=value;
+function getUtlPram(url){
+    url=url?url:window.location.href;
+    let str=url.substring(url.indexOf('?')+1);
+    let arrs=str.split('&');
+    let result={};
+    for (let i=0;i<arrs.length;i++){
+	let item=arrs[i].split('=');
+        let name=item[0];
+        let value=item[1];
+        result[name]=value;
 	}
 	return result;
 }
@@ -45,14 +42,12 @@ function getUrlPrmt(url) {
 //设置url参数
 //setUrlParme({'a':1,'b':2})
 //a=1&b=2
-function setUrlParme(obj) {
-	let result=[];
+function setParm(obj) {
+	let arr=[];
 	for (let key in obj){
-		if (obj[key]){
-			result.push(key+'='+obj[key]);
-		}
+	    arr.push(`${key}=${obj[key]}`);
 	}
-	return result.join('&');
+	return arr.join('&');
 }
 
 //移除事件
