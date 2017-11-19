@@ -10,18 +10,6 @@ const BrowserInfo={
     isWeixin:Boolean(navigator.userAgent.match(/MicroMessenger/ig))
 };
 
-//返回字符串长度，汉字计数为2
-function strLength(str) {
-    let a=0;
-    for (let i=0;i<str.length;i++){
-	if (str.charCodeAt(i)>255){
-		a+=2;
-	}else {}
-	a++;
-}
-return a;
-}
-
 //获取url参数
 //getUrlPrmt('segmentfault.com/write?draftId=122000011938')
 //Object{draftId: "122000011938"}
@@ -754,4 +742,16 @@ function getMaxSumOfSubstring(str) {
 //用newStr替换fullStr中的oldStr
 function replaceString(oldStr,newStr,fullStr){
 	return fullStr.split(oldStr).join(newStr);
+}
+
+//取页面中所有的checkbox
+function getAllCheckbox(){
+let inputList=document.getElementsByTagName('input'),
+    checkList=[],
+    len=inputList.length;
+while (len--){
+    if (inputList[len].type=='checkbox'){
+        checkList.push(inputList[len]);
+    }
+}
 }
