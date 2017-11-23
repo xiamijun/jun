@@ -1,0 +1,15 @@
+/*文字模糊效果文字模糊效果*/
+*{
+    color: transparent;
+    text-shadow: #111 0 0 5px;
+}
+
+/*input输入框去掉默认的蓝线框*/
+input {
+    outline : none;
+}
+
+/*设置input默认线框的距离*/
+input {
+    outline-offset: 4px ;
+}

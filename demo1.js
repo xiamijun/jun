@@ -38,17 +38,19 @@ function setParm(obj) {
 	return arr.join('&');
 }
 
-//移除事件
-function moveBind(objId,eventType,callback) {
-	let obj=document.getElementById(objId);
-	if(obj.removeEventListener){
-		obj.removeEventListener(eventType,callback);
-	}else if(obj.detachEvent){
-		obj.detachEvent('on'+eventType,callback);
-	}else {
-		obj['on'+eventType]=null;
-	}
+//绑定事件
+let addHandler=document.body.addEventListener?function (target,eventType,handler) {
+    target.addEventListener(eventType,handler,false);
+}:function (target,eventType,handler) {
+    target.attachEvent('on'+eventType,handler);
 }
+
+//移除事件
+let removeHandler=document.body.removeEventListener()?function (target,eventType,handler) {
+    target.removeEventListener(eventType,handler,false);
+}:function (target,eventType,handler) {
+    target.detachEvent('on'+eventType,handler);
+};
 
 //去除空格  type 1-所有空格  2-前后空格  3-前空格 4-后空格
 function trimString(str,type=1) {
@@ -218,6 +220,9 @@ function randomString(count) {
 function removeRepeatArray(arr) {
 	return Array.from(new Set(arr));
 }
+function removeRepeatArray2(arr) {
+    return [...new Set(arr)];
+}
 
 //数组顺序打乱
 function shuffleArray(arr) {
@@ -293,7 +298,7 @@ function getEleCount(obj,ele) {
 	return num;
 }
 
-//统计数组（字符串）所有元素出现的次数
+//统计数组中所有元素出现的次数
 //等同于php中的array_count_values，但返回的是对象
 function array_count_values(arr) {
 	let map={};
@@ -305,6 +310,14 @@ function array_count_values(arr) {
 		}
 	}
 	return map;
+}
+
+//统计数组中所有元素出现的次数，方法二
+function array_count_values2(arr) {
+    return arr.reduce((pre,cur)=>{
+    	pre[cur]?pre[cur]++:pre[cur]=1;
+    	return pre;
+	},{})
 }
 
 //返回数组(对象)中部分的或所有的键名
@@ -347,45 +360,32 @@ function removeValueInArray(arr,val,type) {
 }
 
 //检测对象是否有哪个类名
-function hasClass(obj,classStr) {
-	if (obj.className){
-        let arr=obj.class.split(/\s+/);
+function hasClass(element,classStr) {
+	if (element.className){
+        let arr=element.class.split(/\s+/);
         return arr.indexOf(classStr)==-1?false:true;
 	}else {
 		return false;
 	}
+}
 
+//检测对象 是否有哪个类名，方法二
+function hasClass2(element,classStr) {
+    return (new RegExp('\\s|^'+classStr+'\\s|$')).test(element.className);
 }
 
 //添加类名
-function addClass(obj,classStr) {
-	if (isType(obj,'array')||isType(obj,'elements')&&obj.length>=1){
-		for(let i=0;i<obj.length;i++){
-			if (!hasClass(obj,classStr)){
-				obj[i].className+=' '+classStr;
-			}
-		}
-	}else {
-        if (!hasClass(obj,classStr)){
-            obj.className+=' '+classStr;
-        }
+function addClass(element,classStr) {
+	if (!hasClass(element,classStr)){
+        element.className+=' '+classStr;
 	}
 }
 
 //删除类名
-function removeClass(obj,classStr) {
-	if(isType(obj,'array')||isType(obj,'elements')&&obj.length>1){
-		for (let i=0;i<obj.length;i++){
-			if (hasClass(obj,classStr)){
-				let reg=new RegExp('\\s|^'+classStr+'\\s|$');
-				obj[i].className=obj.className.replace(reg,'');
-			}
-		}
-	}else {
-        if(hasClass(obj,classStr)){
-            let reg=new RegExp("(^|\\s)"+classStr+"\\s|$");
-            obj.className=obj.className.replace(reg,'');
-        }
+function removeClass(element,classStr) {
+	if(hasClass(element,classStr)){
+		let reg=new RegExp("(^|\\s)"+classStr+"\\s|$");
+        element.className=element.className.replace(reg,'');
 	}
 }
 
@@ -486,25 +486,25 @@ function filterParams(obj) {
 }
 
 //设置cookie
-function setCookie(name,value,iDay) {
-	let oDate=new Date();
-	oDate.setDate(oDate.getDate()+iDay);
-	document.cookie=name+'='+value+';expires='+oDate;
+function setCookie(name,value,days) {
+	let date=new Date();
+    date.setDate(date.getDate()+days);
+	document.cookie=`${name}=${value};expires=${date}`;
 }
 
-//获取cookie
+//根据name获取cookie
 function getCookie(name) {
 	let arr=document.cookie.split(';');
 	for (let i=0;i<arr.length;i++){
 		let arr2=arr[i].split('=');
 		if (arr2[0]==name){
-			return arr2[1];
+			return decodeURIComponent(arr2[1]);
 		}
 	}
 	return '';
 }
 
-//删除cookie
+//根据name删除cookie
 function removeCookie(name) {
 	setCookie(name,1,-1);
 }
@@ -704,9 +704,8 @@ function longestWord(str,splitType=' ') {
 	return max;
 }
 
-//rate是1到5的值
-//取星级
-function star(rate) {
+//评分，rate是[0,1,2,3,4,5]
+function setScore(rate) {
     return '★★★★★☆☆☆☆☆'.slice(5-rate,10-rate);
 }
 
@@ -746,12 +745,78 @@ function replaceString(oldStr,newStr,fullStr){
 
 //取页面中所有的checkbox
 function getAllCheckbox(){
-let inputList=document.getElementsByTagName('input'),
-    checkList=[],
-    len=inputList.length;
-while (len--){
-    if (inputList[len].type=='checkbox'){
-        checkList.push(inputList[len]);
-    }
+	let inputList=document.getElementsByTagName('input'),
+		checkList=[],
+		len=inputList.length;
+	while (len--){
+		if (inputList[len].type=='checkbox'){
+			checkList.push(inputList[len]);
+		}
+	}
 }
+
+//返回数据类型
+function gettype(nm){
+    return Object.prototype.toString.call(nm);
+}
+
+//生成6位数字验证码
+function getVCodeOfXix() {
+    Math.random().toString().slice(-6);
+}
+
+//判断是否为质数
+function isPrime(n) {
+    return !(/^.?$|^(..+?)\1+$/).test('1'.repeat(n))
+}
+
+//二维数组扁平化
+function flatArr(arr) {
+	return arr.reduce((a,b)=>{
+		a.concat(b);
+	});
+}
+
+//获取滚动条距顶部的距离
+function getScrollTop() {
+	return (document.documentElement&&document.documentElement.scrollTop)||document.body.scrollTop;
+}
+
+/**
+ * 获取一个元素的距离文档(document)的位置
+ * @param {HTMLElement} element
+ * @returns {{left: number, top: number}}
+ */
+function offset(element) {
+	let	pos={
+		left:0,
+		top:0
+	};
+	while(element){
+		pos.left+=element.offsetLeft;
+		pos.top+=element.offsetTop;
+		element=element.offsetParent;
+	}
+	return pos;
+}
+
+function deepClone(value) {
+	let copy;
+	if(typeof value!='object'){
+		return value;
+	}
+	if (value instanceof Array){
+		copy=[];
+		for(let i=0;i<value.length;i++){
+			copy[i]=deepClone(value[i]);
+		}
+		return copy;
+	}
+	if (value instanceof Object){
+		copy={};
+		for (let key in value){
+			copy[key]=deepClone(value[key]);
+		}
+	}
+	return copy;
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            overflow: auto;
+        }
+        .header,.footer{
+            position: fixed;
+            left:0;
+            right:0;
+            height: 44px;
+            background-color: blue;
+        }
+        .header{
+            top:0;
+        }
+        .footer{
+            bottom:0;
+        }
+        .main{
+            height:10000px;
+            padding: 44px 0;
+            background-color: #111111;
+        }
+    </style>
+</head>
+<body>
+<!--上中下三栏，上下固定-->
+<div class="header"></div>
+<div class="main"></div>
+<div class="footer"></div>
+</body>
+</html>
