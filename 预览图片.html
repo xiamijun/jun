@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+  <title></title>
 </head>
 <body>
 <input type="file"><br>
 <img src="" height="200">
 <script>
-    let fileInput=document.querySelector('input[type=file]');
-    let previewImg=document.getElementsByTagName('img')[0];
-    fileInput.addEventListener('change',function () {
-        let file=this.files[0];
-        let reader=new FileReader();
-        reader.addEventListener('load',function () {
-            previewImg.src=reader.result;
-        },false);
-        reader.readAsDataURL(file);
-    },false);
+  let fileInput = document.querySelector('input[type=file]');
+  let previewImg = document.getElementsByTagName('img')[0];
+  fileInput.addEventListener('change', function () {
+    let file = this.files[0];
+    let reader = new FileReader();
+    reader.addEventListener('load', function () {
+      previewImg.src = reader.result;
+    }, false);
+    reader.readAsDataURL(file);
+  }, false);
 </script>
 </body>
 </html>
