@@ -4,14 +4,30 @@
  */
 
 /**
- * 手机类型判断
+ * 浏览器类型判断
  */
-const BrowserInfo = {
-  userAgent: navigator.userAgent.toLowerCase(),
-  isAndroid: Boolean(navigator.userAgent.match(/android/ig)),
-  isIphone: Boolean(navigator.userAgent.match(/iphone|ipod/ig)),
-  isIpad: Boolean(navigator.userAgent.match(/ipad/ig)),
-  isWeixin: Boolean(navigator.userAgent.match(/MicroMessenger/ig))
+const browser = {
+  info: (function () {
+    let u = navigator.userAgent,
+      p = navigator.platform;
+    return {
+      trident: u.indexOf('Trident') > -1, //IE内核
+      presto: u.indexOf('Presto') > -1, //opera内核
+      webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+      gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') === -1, //火狐内核
+      mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+      ios: !!u.match(/i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+      android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+      iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+      iPad: u.indexOf('iPad') > -1, //是否iPad
+      weixin: u.indexOf('MicroMessenger') > -1, //是否微信
+      webApp: u.indexOf('Safari') === -1, //是否web应该程序，没有头部与底部
+      UCB: u.match(/UCBrowser/i) === "UCBrowser",
+      QQB: u.match(/MQQBrowser/i) === "MQQBrowser",
+      win: p.indexOf('Win') > -1, //判断是否是WIN操作系统
+      mac: p.indexOf('Mac') > -1 //判断是否是Mac操作系统
+    };
+  })()
 };
 
 /**
@@ -237,3 +253,37 @@ HTMLElement.prototype.getOffset = function (stopSelectorElement) {
   }
   return {top: top, left: left, width: this.offsetWidth, height: this.offsetHeight};
 };
+
+/**
+ * 根据URL下载文件
+ * @param url
+ * @returns {boolean}
+ */
+function download(url) {
+  let isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+  let isSafari = navigator.userAgent.toLowerCase().indexOf('safari') > -1;
+
+  if (isChrome || isSafari) {
+    let link = document.createElement('a');
+    link.href = url;
+
+    if (link.download !== undefined) {
+      let fileName = url.substring(url.lastIndexOf('/') + 1, url.length);
+      link.download = fileName;
+    }
+
+    if (document.createEvent) {
+      let e = document.createEvent('MouseEvents');
+      e.initEvent('click', true, true);
+      link.dispatchEvent(e);
+      return true;
+    }
+  }
+
+  if (url.indexOf('?') === -1) {
+    url += '?download';
+  }
+
+  window.open(url, '_self');
+  return true;
+}

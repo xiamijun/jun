@@ -367,3 +367,13 @@ export function isEmpty(obj) {
     return false;
   }
 }
+
+/**
+ * 生成一个长度为m且值都n的数组
+ * @param m
+ * @param n
+ * @returns {any[]}
+ */
+function setArray(m, n) {
+  return Array(m).fill(n);
+}

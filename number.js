@@ -97,12 +97,13 @@ function isPrime(n) {
 }
 
 /**
- * 浮动数四舍五入  v表示要保存小数位
+ * 浮点数四舍五入  v表示要保存小数位
  * @param num
  * @param v
  * @returns {number}
  */
-export function decimal(num, v) {
+function decimal(num, v) {
   let vv = Math.pow(10, v);
   return Math.round(num * vv) / vv;
 }
+
