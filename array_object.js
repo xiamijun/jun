@@ -314,14 +314,14 @@ function arraySort(arr, sortText) {
 }
 
 /**
- * 二维数组扁平化
+ * 数组扁平化
  * @param arr
  * @returns {*}
  */
 function flatArr(arr) {
-  return arr.reduce((a, b) => {
-    a.concat(b);
-  });
+  return [].concat(...arr.map(v => {
+    return Array.isArray(v) ? flatArr(v) : v
+  }))
 }
 
 /**
@@ -372,8 +372,140 @@ export function isEmpty(obj) {
  * 生成一个长度为m且值都n的数组
  * @param m
  * @param n
- * @returns {any[]}
+ * @returns {Array}
  */
 function setArray(m, n) {
   return Array(m).fill(n);
 }
+
+/**
+ * 二维数组转换为CSV字符串，行间换行
+ * @param arr 数组
+ * @param delimiter 行内分隔符
+ *
+ * arrayToCSV([['a', 'b'], ['c', 'd']]); // '"a","b"\n"c","d"'
+ * arrayToCSV([['a', 'b'], ['c', 'd']], ';'); // '"a";"b"\n"c";"d"'
+ */
+function arrayToCSV(arr, delimiter = ',') {
+  return arr.map(v => v.map(x => `${x}`).join(delimiter)).join('\n');
+}
+
+/**
+ * 一维数组按长度分割为二维数组
+ * @param arr
+ * @param size  每个数组长度
+ *
+ * chunk([1, 2, 3, 4, 5], 2); // [[1,2],[3,4],[5]]
+ */
+function chunk(arr, size) {
+  return Array.from({
+    length: Math.ceil(arr.length / size)
+  }, (item, index) => arr.slice(index * size, index * size + size))
+}
+
+/**
+ * 去除数组中的 falsey values
+ * @param arr
+ *
+ * compact([0, 1, false, 2, '', 3, 'a', 'e' * 23, NaN, 's', 34]); // [ 1, 2, 3, 'a', 's', 34 ]
+ */
+function compact(arr) {
+  return arr.filter(Boolean);
+}
+
+/**
+ * 数组相减，存在于a数组不存在与b数组
+ * @param a
+ * @param b
+ * @returns {*}
+ *
+ * difference([1, 2, 3], [1, 2, 4]); // [3]
+ */
+function difference(a, b) {
+  const s = new Set(b);
+  return a.filter(item => !s.has(item));
+}
+
+/**
+ * 去除数组中不唯一的元素
+ * @param arr
+ * @returns {*}
+ *
+ * filterNonUnique([1, 2, 2, 3, 4, 4, 5]); // [1, 3, 5]
+ */
+function filterNonUnique(arr) {
+  return arr.filter(i => arr.indexOf(i) === arr.lastIndexOf(i));
+}
+
+/**
+ * 返回某个值在数组中所有的下标构成的数组，如数组中没有该值，返回空数组
+ * @param arr
+ * @param val 查询的值
+ * @returns {*}
+ *
+ * indexOfAll([1, 2, 3, 1, 2, 3], 1); // [0,3]
+ * indexOfAll([1, 2, 3], 4); // []
+ */
+function indexOfAll(arr, val) {
+  return arr.reduce((acc, el, i) => (el === val ? [...acc, i] : acc), [])
+}
+
+/**
+ * 创建一个height行，width列，val值填充的二维数组
+ * @param width
+ * @param height
+ * @param val
+ * @returns {[][]}
+ *
+ * initialize2DArray(2, 2, 0); // [[0,0], [0,0]]
+ */
+function initialize2DArray(width, height, val = null) {
+  return Array.from({length: height}).map(() => Array.from({length: width}).fill(val));
+}
+
+/**
+ * 初始化一个值为start至end的数组，步长为step(默认为1)
+ * @param start
+ * @param end
+ * @param step
+ * @returns {[]}
+ */
+function initializeArrayWithRange(start, end, step = 1) {
+  return Array.from({length: Math.ceil((end - start + 1) / step)}, (v, i) => i * step + start);
+}
+
+/**
+ * 取两个数组的交集
+ * @param a
+ * @param b
+ * @returns {*}
+ *
+ * intersection([1, 2, 3], [4, 3, 2]); // [2, 3]
+ */
+function intersection(a, b) {
+  const s = new Set(b);
+  return a.filter(x => s.has(x));
+}
+
+/**
+ * 检查数组是否有序
+ * 若升序返回1，降序返回-1，无序返回0
+ * @param arr
+ * @returns {number}
+ *
+ * isSorted([0, 1, 2, 2]); // 1
+ * isSorted([4, 3, 2]); // -1
+ * isSorted([4, 3, 5]); // 0
+ */
+function isSorted(arr) {
+  let direction = -(arr[0] - arr[1]);
+  for (let [i, val] of arr.entries()) {
+    direction = !direction ? -(arr[i - 1] - arr[i]) : direction;
+    if (i === arr.length - 1) {
+      return !direction ? 0 : direction;
+    } else if ((val - arr[i + 1]) * direction > 0) {
+      return 0;
+    }
+  }
+}
+
