@@ -251,7 +251,12 @@ HTMLElement.prototype.getOffset = function (stopSelectorElement) {
       break;
     }
   }
-  return {top: top, left: left, width: this.offsetWidth, height: this.offsetHeight};
+  return {
+    top: top,
+    left: left,
+    width: this.offsetWidth,
+    height: this.offsetHeight
+  };
 };
 
 /**

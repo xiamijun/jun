@@ -497,7 +497,7 @@ function intersection(a, b) {
  * isSorted([4, 3, 2]); // -1
  * isSorted([4, 3, 5]); // 0
  */
-function isSorted(arr) {
+export function isSorted(arr) {
   let direction = -(arr[0] - arr[1]);
   for (let [i, val] of arr.entries()) {
     direction = !direction ? -(arr[i - 1] - arr[i]) : direction;
@@ -509,3 +509,36 @@ function isSorted(arr) {
   }
 }
 
+/**
+ * @param {Array} arr1
+ * @param {Array} arr2
+ * @description 得到两个数组的交集, 两个数组的元素为数值或字符串
+ */
+export function getIntersection(arr1, arr2) {
+  let len = Math.min(arr1.length, arr2.length);
+  let i = -1;
+  let res = [];
+  while (++i < len) {
+    const item = arr2[i];
+    if (arr1.indexOf(item) > -1) res.push(item);
+  }
+  return res;
+};
+
+/**
+ * @param {Array} arr1
+ * @param {Array} arr2
+ * @description 得到两个数组的并集, 两个数组的元素为数值或字符串
+ */
+export const getUnion = (arr1, arr2) => {
+  return Array.from(new Set([...arr1, ...arr2]));
+};
+
+/**
+ * @param {Array} targetarr 目标数组
+ * @param {Array} arr 需要查询的数组
+ * @description 判断要查询的数组是否至少有一个元素包含在目标数组中
+ */
+export const hasOneOf = (targetarr, arr) => {
+  return targetarr.some(_ => arr.indexOf(_) > -1);
+};

@@ -107,3 +107,13 @@ function decimal(num, v) {
   return Math.round(num * vv) / vv;
 }
 
+/**
+ * 小数转百分比
+ * @param {Number} point 小数
+ * @param {Number} fixed 保留小数位数
+ */
+export const toPercent = (point, fixed) => {
+  let str = Number(point * 100).toFixed(fixed);
+  str += '%';
+  return str;
+};

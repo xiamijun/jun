@@ -169,3 +169,20 @@ export function throttle(fn, wait, time) {
     }
   }
 }
+
+/**
+ * 转义HTML字符串，防止xss攻击
+ * @param {String} str 
+ */
+export const escapeHTML = str =>
+  str.replace(
+    /[&<>'"]/g,
+    tag =>
+    ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    } [tag] || tag)
+  );
