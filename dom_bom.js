@@ -37,7 +37,7 @@ const browser = {
  * getUrlPrmt('segmentfault.com/write?draftId=122000011938')
  * Object{draftId: "122000011938"}
  */
-function getUtlPram(url) {
+function getUtlParam(url) {
   url = url ? url : window.location.href;
   let str = url.substring(url.indexOf('?') + 1);
   let arrs = str.split('&');

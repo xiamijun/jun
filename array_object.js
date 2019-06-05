@@ -330,24 +330,21 @@ function flatArr(arr) {
  * @returns {*}
  */
 function deepClone(value) {
-  let copy;
+  let copy
   if (typeof value !== 'object') {
-    return value;
-  }
-  if (value instanceof Array) {
-    copy = [];
+    copy = value
+  } else if (value instanceof Array) {
+    copy = []
     value.forEach(item => {
-      copy[i] = deepClone(item);
-    });
-    return copy;
-  }
-  if (value instanceof Object) {
-    copy = {};
-    for (let key in value) {
-      copy[key] = deepClone(value[key]);
+      copy.push(deepClone(item))
+    })
+  } else if (value instanceof Object) {
+    copy = {}
+    for (const key in value) {
+      copy[key] = deepClone(value[key])
     }
   }
-  return copy;
+  return copy
 }
 
 

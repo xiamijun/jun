@@ -131,13 +131,11 @@ function ajax(obj) {
  * @param wait
  * @returns {Function}
  */
-export function debounce(fn, wait) {
-  var timer = null;
+export function debounce(fn, delay) {
+  let timer = null //借助闭包
   return function (...args) {
     clearTimeout(timer)
-    timer = setTimeout(() => {
-      fn(...args)
-    }, wait)
+    timer = setTimeout(fn(...args), delay) // 简化写法
   }
 }
 
@@ -186,3 +184,20 @@ export const escapeHTML = str =>
       '"': '&quot;'
     } [tag] || tag)
   );
+
+// 记忆函数，缓存函数结果值
+export const memoize=function(fn){
+  const cache={}
+  return function () {
+    const key=JSON.stringify(arguments)
+    var value=cache[key]
+    if (!value) {
+      console.log('新值，执行中...');
+      value=[fn.apply(this,arguments)]
+      cache[key]=value
+    }else{
+       console.log('来自缓存');
+    }
+    return value[0]
+  }
+}
