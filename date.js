@@ -4,7 +4,7 @@
  */
 
 /**
- * 到某一个时间的倒计时
+ * 现在到某一个时间的倒计时
  * @param endTime
  * @returns {string}
  *
@@ -26,6 +26,38 @@ function countTime(endTime) {
   } else {
     return '时间已过期';
   }
+}
+
+/**
+ * leftTime：剩余时间
+ **/
+export function countTime(leftTime) {
+  let deadlineText = ''
+  if (leftTime >= 0) {
+    // 定义变量 d,h,m,s保存倒计时的时间
+    let d = Math.floor(this.leftTime / 1000 / 60 / 60 / 24);
+    let h = Math.floor(this.leftTime / 1000 / 60 / 60 % 24);
+    let m = Math.floor(this.leftTime / 1000 / 60 % 60);
+    let s = Math.floor(this.leftTime / 1000 % 60);
+    if (d > 0) {
+      deadlineText = `${d}天`;
+    } else {
+      if (h < 10) {
+        h = `0${h}`
+      }
+      if (m < 10) {
+        m = `0${m}`
+      }
+      if (s < 10) {
+        s = `0${s}`
+      }
+      deadlineText = `${h}:${m}:${s}`;
+    }
+    leftTime -= 1000
+  } else {
+    deadlineText = `已截止`;
+  }
+  return deadlineText;
 }
 
 /**
@@ -131,4 +163,45 @@ function getweek(z) {
   let year = now.getFullYear().toString();
   year = year.substring(2);
   return week;
+}
+
+/**
+ * updateTime：创建时间
+ * nowTime：现在时间
+ **/
+export const getUpdateTime = function (updateTime, nowTime) {
+  if (updateTime === null) {
+    return ''
+  }
+  let now = nowTime ? nowTime : new Date().getTime()
+  let second = Math.floor((now - updateTime) / (1000))
+  let minute = Math.floor(second / 60)
+  let hour = Math.floor(minute / 60)
+  let day = Math.floor(hour / 24)
+  let month = Math.floor(day / 31)
+  let year = Math.floor(month / 12)
+  if (year > 0) {
+    return new Date(updateTime).format('yyyy-MM-dd hh:mm')
+  } else if (day > 0) {
+    // let ret = day + '天前'
+    // if (day >= 7 && day < 14) {
+    //   ret = '1周前'
+    // } else if (day >= 14 && day < 21) {
+    //   ret = '2周前'
+    // } else if (day >= 21 && day < 28) {
+    //   ret = '3周前'
+    // } else if (day >= 28 && day < 31) {
+    //   ret = '4周前'
+    // }
+    // return ret
+    return new Date(updateTime).format('MM-dd hh:mm')
+  } else if (hour > 0) {
+    return hour + '小时前'
+  } else if (minute > 0) {
+    return minute + '分钟前'
+  } else if (second > 0) {
+    return second + '秒前'
+  } else {
+    return '刚刚'
+  }
 }
