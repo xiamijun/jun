@@ -539,3 +539,10 @@ export const getUnion = (arr1, arr2) => {
 export const hasOneOf = (targetarr, arr) => {
   return targetarr.some(_ => arr.indexOf(_) > -1);
 };
+
+// 过滤数组中空值
+// const arr = [undefined, null, "", 0, false, NaN, 1, 2].filter(Boolean);
+// arr => [1, 2]
+function filterEmpty(arr) {
+  return arr.filter(Boolean);
+}

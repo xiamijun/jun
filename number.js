@@ -74,9 +74,11 @@ function randomNumber(n1, n2) {
  * 1234567890 --> 1,234,567,890
  */
 function formatCash(str) {
-  return str.split('').reverse().reduce((prev, next, index) => {
-    return ((index % 3) ? next : (next + ',')) + prev;
-  })
+  // return str.split('').reverse().reduce((prev, next, index) => {
+  //   return ((index % 3) ? next : (next + ',')) + prev;
+  // })
+
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
 /**
@@ -117,3 +119,17 @@ export const toPercent = (point, fixed) => {
   str += '%';
   return str;
 };
+
+// 补零
+// const num = FillZero(169, 5);
+// num => "00169"
+function fillZero(num, len) {
+  return num.toString().padStart(len, "0");
+}
+
+// 精确到几位小数
+// const num = RoundNum(1.69, 1);
+// num => 1.7
+function roundNum(num, decimal) {
+  return Math.round(num * 10 ** decimal) / 10 ** decimal
+}

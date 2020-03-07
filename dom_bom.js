@@ -142,7 +142,8 @@ function removeClass(element, classStr) {
  */
 function randomColor() {
   // return 'rgb('+randomNumber(255)+','+randomNumber(255)+','+randomNumber(255)+')';
-  return '#' + Math.random().toString(16).substr(2, 3)
+  // return '#' + Math.random().toString(16).substr(2, 3)
+  return "#" + Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0");
 }
 
 /**
@@ -292,3 +293,8 @@ function download(url) {
   window.open(url, '_self');
   return true;
 }
+
+// 操作URL查询参数
+const params = new URLSearchParams(location.search.replace(/\?/ig, "")); // location.search = "?name=young&sex=male"
+params.has("young"); // true
+params.get("sex"); // "male"
