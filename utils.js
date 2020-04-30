@@ -93,10 +93,8 @@ function ajax(obj) {
   obj.url = obj.url || '';
   obj.async = obj.anync || true;
   obj.data = obj.data || null;
-  obj.success = obj.success || function () {
-  };
-  obj.error = obj.error || function () {
-  };
+  obj.success = obj.success || function () {};
+  obj.error = obj.error || function () {};
   let xmlHttp = null;
   if (XMLHttpRequest) {
     xmlHttp = new XMLHttpRequest();
@@ -158,7 +156,7 @@ export function throttle(fn, wait, time) {
     if (now - previous > time) {
       clearTimeout(timer);
       fn();
-      previous = now;// 执行函数后，马上记录当前时间
+      previous = now; // 执行函数后，马上记录当前时间
     } else {
       clearTimeout(timer);
       timer = setTimeout(function () {
@@ -186,18 +184,64 @@ export const escapeHTML = str =>
   );
 
 // 记忆函数，缓存函数结果值
-export const memoize=function(fn){
-  const cache={}
+export const memoize = function (fn) {
+  const cache = {}
   return function () {
-    const key=JSON.stringify(arguments)
-    var value=cache[key]
+    const key = JSON.stringify(arguments)
+    var value = cache[key]
     if (!value) {
       console.log('新值，执行中...');
-      value=[fn.apply(this,arguments)]
-      cache[key]=value
-    }else{
-       console.log('来自缓存');
+      value = [fn.apply(this, arguments)]
+      cache[key] = value
+    } else {
+      console.log('来自缓存');
     }
     return value[0]
   }
+}
+
+/**
+ * 下载方法一： 已有后台返回文件的下载url
+ * @param {String} url 文件的下载url
+ */
+export const downloadFile = (url) => {
+  let downloadIFrame = null;
+  downloadIFrame = document.createElement('iframe');
+  downloadIFrame.style.position = 'fixed';
+  downloadIFrame.style.opacity = '0';
+  downloadIFrame.style.width = '10px';
+  downloadIFrame.style.height = '10px';
+  downloadIFrame.style.left = '-20px';
+  downloadIFrame.style.top = '-20px';
+  downloadIFrame.width = '10';
+  downloadIFrame.height = '10';
+  downloadIFrame.src = url ? url : '';
+  document.body.appendChild(downloadIFrame);
+}
+
+/**
+ * 下载方法二： 请求接口， 后台返回的是blob
+ * @param {String} url 请求地址
+ * @param {Object} queryString 请求参数
+ * @param {Object} options 请求额外选项
+ */
+export const downLoadExcelFile = (url, queryString, options = {}) => {
+  let queryOptions = Object.assign({
+    responseType: 'arraybuffer'
+  }, options);
+  axios.post(url, queryString, queryOptions).then(res => {
+    let blob = new Blob([data], {
+      type: 'application/vnd.ms-excel'
+    });
+    let downloadElement = document.createElement('a');
+    let href = window.URL.createObjectURL(blob); // 创建下载的链接
+    downloadElement.href = href;
+    if (fileName) {
+      downloadElement.download = fileName;
+    }
+    document.body.appendChild(downloadElement);
+    downloadElement.click(); // 点击下载
+    document.body.removeChild(downloadElement); // 下载完成移除元素
+    window.URL.revokeObjectURL(href); // 释放掉blob对象
+  })
 }
