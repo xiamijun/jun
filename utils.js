@@ -126,42 +126,32 @@ function ajax(obj) {
 /**
  * 防抖
  * @param fn
- * @param wait
+ * @param time
  * @returns {Function}
  */
-export function debounce(fn, delay) {
-  let timer = null //借助闭包
+export function debounce(fn, time) {
+  let timer = null
   return function (...args) {
     clearTimeout(timer)
-    timer = setTimeout(fn(...args), delay) // 简化写法
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, time)
   }
 }
 
 /**
  * 节流
  * @param fn
- * @param wait
  * @param time
  * @returns {Function}
  */
-export function throttle(fn, wait, time) {
-  let previous = null; //记录上一次运行的时间
-  let timer = null;
-
-  return function () {
-    let now = +new Date();
-
-    if (!previous) previous = now;
-    //当上一次执行的时间与当前的时间差大于设置的执行间隔时长的话，就主动执行一次
-    if (now - previous > time) {
-      clearTimeout(timer);
-      fn();
-      previous = now; // 执行函数后，马上记录当前时间
-    } else {
-      clearTimeout(timer);
-      timer = setTimeout(function () {
-        fn();
-      }, wait);
+export function throttle(fn, time) {
+  let pre = 0; //记录上一次运行的时间
+  return function (...args) {
+    let now = new Date().getTime();
+    if (now - pre > time) {
+      pre = now
+      fn.apply(this, args)
     }
   }
 }

@@ -61,9 +61,8 @@ function minArray(arr) {
  */
 function sumArr(arr) {
   return arr.reduce((pre, cur) => {
-      return pre + cur;
-    }
-  );
+    return pre + cur;
+  });
 }
 
 
@@ -75,9 +74,8 @@ function sumArr(arr) {
  */
 export function array_product(arr) {
   return arr.reduce((pre, cur) => {
-      return pre * cur;
-    }
-  );
+    return pre * cur;
+  });
 }
 
 
@@ -201,9 +199,8 @@ function objToArray(obj) {
  */
 function removeValueInArray(arr, val, type) {
   arr.filter(item => {
-      return type === '%' ? item.indexOf(val) !== -1 : item !== val;
-    }
-  );
+    return type === '%' ? item.indexOf(val) !== -1 : item !== val;
+  });
 }
 
 /**
@@ -319,9 +316,31 @@ function arraySort(arr, sortText) {
  * @returns {*}
  */
 function flatArr(arr) {
-  return [].concat(...arr.map(v => {
-    return Array.isArray(v) ? flatArr(v) : v
-  }))
+  // return [].concat(...arr.map(v => {
+  //   return Array.isArray(v) ? flatArr(v) : v
+  // }))
+  return arr.reduce((target, current) => {
+    if (Array.isArray(current)) {
+      target.concat(flatArr(current))
+    } else {
+      target.concat(current)
+    }
+  }, [])
+}
+
+/**
+ * 根据指定深度扁平数组
+ * @param {Array} arr 数组
+ * @param {Number} deep 深度
+ */
+export function flatArrByDeep(arr, deep = 1) {
+  return arr.reduce((target, current) => {
+    if (Array.isArray(current) && deep > 1) {
+      target.concat(flatArrByDeep(current, deep - 1))
+    } else {
+      target.concat(current)
+    }
+  }, [])
 }
 
 /**
@@ -457,7 +476,11 @@ function indexOfAll(arr, val) {
  * initialize2DArray(2, 2, 0); // [[0,0], [0,0]]
  */
 function initialize2DArray(width, height, val = null) {
-  return Array.from({length: height}).map(() => Array.from({length: width}).fill(val));
+  return Array.from({
+    length: height
+  }).map(() => Array.from({
+    length: width
+  }).fill(val));
 }
 
 /**
@@ -468,7 +491,9 @@ function initialize2DArray(width, height, val = null) {
  * @returns {[]}
  */
 function initializeArrayWithRange(start, end, step = 1) {
-  return Array.from({length: Math.ceil((end - start + 1) / step)}, (v, i) => i * step + start);
+  return Array.from({
+    length: Math.ceil((end - start + 1) / step)
+  }, (v, i) => i * step + start);
 }
 
 /**

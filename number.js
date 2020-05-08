@@ -23,7 +23,10 @@ function randomString(count) {
  * @param n
  * @returns {*}
  */
-import {array_product, range} from './array_object'
+import {
+  array_product,
+  range
+} from './array_object'
 
 function factorial(n) {
   return array_product(range(1, n));
@@ -132,4 +135,19 @@ function fillZero(num, len) {
 // num => 1.7
 function roundNum(num, decimal) {
   return Math.round(num * 10 ** decimal) / 10 ** decimal
+}
+
+/**
+ * 数组乱序重排，从最后一个元素开始，从数组中随机选出一个位置，交换，直到第一个元素。
+ * @param {Array} arr 
+ */
+export function disorder(arr) {
+  let length = arr.length
+  let current = length - 1
+  let random
+  while (current > -1) {
+    random = Math.floor(Math.random() * length)[arr[current], arr[random]] = [arr[random], arr[current]]
+    current--
+  }
+  return arr
 }
